@@ -7,6 +7,7 @@ import {
   putFile,
   lookupProfile
 } from 'blockstack';
+import Status from './Status.jsx';
 
 const avatarFallbackImage = 'https://s3.amazonaws.com/onename/avatar-placeholder.png';
 const statusFileName = 'statuses.json'
@@ -30,6 +31,9 @@ export default class Profile extends Component {
       statusIndex: 0,
       isLoading: false
   	};
+
+    this.handleDelete = this.handleDelete.bind(this);
+    this.isLocal = this.isLocal.bind(this);
   }
 
   componentDidMount() {
@@ -47,6 +51,18 @@ export default class Profile extends Component {
     this.setState({
       newStatus: ""
     })
+  }
+
+  handleDelete(id) {
+    const statuses = this.state.statuses.filter((status) => status.id !== id)
+    const options = { encrypt: false }
+
+    putFile(statusFileName, JSON.stringify(statuses), options)
+      .then(() => {
+        this.setState({
+          statuses
+        })
+      })
   }
 
   saveNewStatus(statusText) {
@@ -176,12 +192,16 @@ export default class Profile extends Component {
             }
             <div className="col-md-12 statuses">
             {this.state.isLoading && <span>Loading...</span>}
-            {this.state.statuses.map((status) => (
-                <div className="status" key={status.id}>
-                  {status.text}
-                </div>
-                )
-            )}
+            {
+              this.state.statuses.map((status) => (
+                <Status
+                  key={status.id}
+                  status={status}
+                  handleDelete={this.handleDelete}
+                  isLocal={this.isLocal}
+                />
+              ))
+            }
             </div>
           </div>
         </div>

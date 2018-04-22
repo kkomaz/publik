@@ -33,3 +33,6 @@ input, textarea{color:#000;padding:10px;}
 /* Statuses */
 .statuses{padding-top:30px;}
 .status{margin:15px 0px;padding:20px;background-color:#2e2e2e;border-radius:6px}
+.status-delete{margin-top: 10px}
+.status-delete-confirmation {margin-top: 10px}
+.status-delete-yes{margin-right: 5px}
